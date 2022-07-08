@@ -136,7 +136,7 @@ h2 {
 }
 
 input, label {
-    float:inline;
+    block: inline;
     margin:5px;
 }
 

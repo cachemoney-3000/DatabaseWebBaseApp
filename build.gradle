@@ -22,11 +22,12 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+    implementation 'mysql:mysql-connector-java:8.0.29'
     compileOnly('jakarta.servlet:jakarta.servlet-api:5.0.0')
     implementation('org.glassfish.jersey.containers:jersey-container-servlet:3.0.4')
     implementation('org.glassfish.jersey.media:jersey-media-json-jackson:3.0.4')
     implementation('org.glassfish.jersey.inject:jersey-cdi2-se:3.0.4')
-    implementation('org.jboss.weld.se:weld-se-core:4.0.3.Final')
+    implementation('org.jboss.weld.se:weld-se-core:5.0.0.Final')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

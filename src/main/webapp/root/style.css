@@ -167,8 +167,8 @@ textarea {
 .content-table {
   table-layout: fixed;
   width: 100%;
-  
-  font-family: Arial, Helvetica, sans-serif;  
+
+  font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   margin: 25px 0;
   font-size: 14px;
@@ -222,4 +222,65 @@ textarea {
 
   font-family: Arial, Helvetica, sans-serif;  
   color: white;
+}
+
+
+.table-sortable {
+  table-layout: fixed;
+  width: 100%;
+
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 14px;
+  min-width: 400px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.table-sortable tbody tr:hover {
+  font-weight: bold;
+  color: #e54128;
+}
+
+.table-sortable thead tr {
+  background-color: #e54128;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+.table-sortable th,
+.table-sortable td {
+  padding: 12px 15px;
+}
+
+.table-sortable tbody tr:nth-of-type(even) {
+  background-color: #cccccc;
+}
+
+.table-sortable tbody tr {
+  background-color: #e6e6e6;
+}
+
+.table-sortable th {
+  cursor: pointer;
+}
+
+.table-sortable .th-sort-asc::after {
+  content: "\25b4";
+}
+
+.table-sortable .th-sort-desc::after {
+  content: "\25be";
+}
+
+.table-sortable .th-sort-asc::after,
+.table-sortable .th-sort-desc::after {
+  margin-left: 5px;
+}
+
+.table-sortable .th-sort-asc,
+.table-sortable .th-sort-desc {
+  background: rgba(0, 0, 0, 0.1);
 }

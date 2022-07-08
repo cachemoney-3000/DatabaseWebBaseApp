@@ -1,10 +1,21 @@
-<%--
+<%@ page import="java.io.PrintWriter" %><%--
   Created by IntelliJ IDEA.
   User: samon
   Date: 7/8/2022
   Time: 3:09 AM
   To change this template use File | Settings | File Templates.
 --%>
+<%
+    String textBox = (String) session.getAttribute("textBox");
+    String result = (String) session.getAttribute("result");
+    if(result == null){
+        result = " ";
+    }
+    if(textBox == null){
+        textBox = " ";
+    }
+%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en" >
@@ -29,15 +40,16 @@
 
 <body style="background-color: #222b45;">
 <div class = "Hbox">
-    <form action="/" method="post">
+    <form action="hello" method="post">
         <div class>
-            <textarea name="textBox" id="textBox" class = "textarea" placeholder = "Type your SQL commands here" rows="4" cols="50"></textarea>
+            <br/>
+            <textarea type = "text" name="textBox" id="textBox" class = "textarea" placeholder = "Type your SQL commands here" rows="4" cols="50"></textarea>
         </div>
 
         <div class = "container">
-            <button name="resetButton" id="resetButton"  class = "resetButton">Reset Table</button>
-            <button name="clearButton" id="clearButton"  class = "clearButton">Clear</button>
-            <button name="executeButton" id="executeButton" class = "executeButton">Execute</button>
+            <input type = "reset" value = "Reset Table" name="button" id="resetButton"  class = "resetButton">
+            <input type = "reset" value = "Clear"  name="button" id="clearButton"  class = "clearButton">
+            <input type = "submit" value = "Execute"  name="button" id="executeButton" class = "executeButton">
         </div>
     </form>
 </div>
@@ -50,44 +62,14 @@
     </p>
 </div>
 
+
 <div class = "tableResult">
-    <table class="content-table">
-        <thead>
-        <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Points</th>
-            <th>Team</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>Domenic</td>
-            <td>88,110</td>
-            <td>dcode</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Sally</td>
-            <td>72,400</td>
-            <td>Students</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Nick</td>
-            <td>52,300</td>
-            <td>dcode</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Nick</td>
-            <td>52,300</td>
-            <td>dcode</td>
-        </tr>
-        </tbody>
-    </table>
+    <%-- jsp statement with out sql response--%>
+    <%= result %>
 </div>
+
+
+<script  src="./sorttable.js"></script>
 </body>
 </html>
 
