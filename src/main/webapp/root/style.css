@@ -124,17 +124,39 @@ textarea {
 }
 
 .executionContainer {
-  display: block;  
+  display: block;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 20px;
-  
   opacity: 0.7;
-  
-  /*background: #5a5a5a;*/ /*initial*/
+
+  background: #5a5a5a; /*initial*/
+
+  border-radius: 15px;
+  width: 785px;
+  height: auto;
+}
+
+.executionContainerGood {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  opacity: 0.7;
+
   background: #007144;  /*successful*/
-  /*background: #dc4b48;*/ /*unsuccessful*/
-  
+
+  border-radius: 15px;
+  width: 785px;
+  height: auto;
+}
+
+.executionContainerBad {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+
+  opacity: 0.7;
+  background: #dc4b48; /*unsuccessful*/
+
   border-radius: 15px;
   width: 785px;
   height: auto;

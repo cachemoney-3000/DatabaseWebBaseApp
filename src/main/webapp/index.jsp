@@ -9,11 +9,15 @@
     String textBox = (String) session.getAttribute("textBox");
     String result = (String) session.getAttribute("result");
     if(result == null){
-        result = " ";
+        result = "";
     }
     if(textBox == null){
-        textBox = " ";
+        textBox = "";
     }
+%>
+
+<%
+    String execute = (String) session.getAttribute("execute");
 %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -43,24 +47,18 @@
     <form action="hello" method="post">
         <div class>
             <br/>
-            <textarea type = "text" name="textBox" id="textBox" class = "textarea" placeholder = "Type your SQL commands here" rows="4" cols="50"></textarea>
+            <textarea type = "text" name="textBox" id="textBox" class = "textarea" placeholder = "Type your SQL commands here" rows="4" cols="50"><%= textBox %></textarea>
         </div>
 
         <div class = "container">
-            <input type = "reset" value = "Reset Table" name="button" id="resetButton"  class = "resetButton">
-            <input type = "reset" value = "Clear"  name="button" id="clearButton"  class = "clearButton">
-            <input type = "submit" value = "Execute"  name="button" id="executeButton" class = "executeButton">
+            <input type = "submit" value = "Reset Table" name="button_clicked" id="resetButton"  class = "resetButton">
+            <input type = "submit" value = "Clear"  name="button_clicked" id="clearButton"  class = "clearButton">
+            <input type = "submit" value = "Execute"  name="button_clicked" id="executeButton" class = "executeButton">
         </div>
     </form>
 </div>
 
-<div class = "executionContainer">
-    <p class = "executionText">Command executed successfully
-        </br> 999 row(s) affected
-        </br> Business logic detected! - Updating supplier status
-        </br> Business logic updated 999 supplier(s) status marks
-    </p>
-</div>
+<%= execute %>
 
 
 <div class = "tableResult">

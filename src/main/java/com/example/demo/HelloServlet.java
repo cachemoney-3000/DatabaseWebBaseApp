@@ -33,9 +33,6 @@ public class HelloServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-
-
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
         dispatcher.forward(request, response);
     }
@@ -45,25 +42,48 @@ public class HelloServlet extends HttpServlet {
         String textBoxLowerCase = textBox.toLowerCase();
         String result = null;
 
-        //check to see if it is a select statement
-        if (textBoxLowerCase.contains("select")) {
-            try {
-                result = doSelectQuery(textBoxLowerCase);
-            } catch (SQLException e) {
-                result = "<span>" + e.getMessage() + "</span>";
+        // EXECUTION (FAIL/GOOD) TEXT
+        String execute = "<div class = \"executionContainer\"><p class = \"executionText\">Awaiting command...</p></div>";
 
-                e.printStackTrace();
+        String buttonClicked = request.getParameter("button_clicked");
+
+        String text = "";
+        if (buttonClicked.equals("Execute")) {
+            int flag = 0;
+            //check to see if it is a select statement
+            if (textBoxLowerCase.contains("select")) {
+                try {
+                    result = doSelectQuery(textBoxLowerCase);
+                    flag = 1;
+                } catch (SQLException e) {
+                    execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">" + e.getMessage() + "</p></div>";
+                    e.printStackTrace();
+                }
+
+                if (flag == 1)
+                    execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Command Successful</p></div>";
+
             }
+            else {
+                execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">Invalid Command</p></div>";
+            }
+
+            text = textBox;
         }
+        else if (buttonClicked.equals("Clear")) {
+            text = "";
+        }
+        System.out.println(buttonClicked);
 
         HttpSession session = request.getSession();
+
         session.setAttribute("result", result);
-        session.setAttribute("textBox", textBox);
+        session.setAttribute("textBox", text);
+        session.setAttribute("execute", execute);
+
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
         dispatcher.forward(request, response);
 
-
-        getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     // execute a select query and create table html with resultset

@@ -83,14 +83,36 @@ h2 {
   display: block;  
   margin-right: auto;
   margin-left: auto;
-
-  
   opacity: 0.7;
   
-  /*background: #5a5a5a;*/ /*initial*/
-  background: #007144;  /*successful*/
-  /*background: #dc4b48;*/ /*unsuccessful*/
+  background: #5a5a5a; /*initial*/
   
+  border-radius: 15px;
+  width: 785px;
+  height: auto;
+}
+
+.executionContainerGood {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  opacity: 0.7;
+
+  background: #007144;  /*successful*/
+
+  border-radius: 15px;
+  width: 785px;
+  height: auto;
+}
+
+.executionContainerBad {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+
+  opacity: 0.7;
+  background: #dc4b48; /*unsuccessful*/
+
   border-radius: 15px;
   width: 785px;
   height: auto;
@@ -101,8 +123,7 @@ h2 {
   text-align: left;
   padding: 1em;;
   line-height: 1.5;
-  
-  
+
   font-family: Arial, Helvetica, sans-serif;  
   color: white;
 }
