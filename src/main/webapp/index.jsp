@@ -18,6 +18,9 @@
 
 <%
     String execute = (String) session.getAttribute("execute");
+    if(execute == null){
+        execute = "";
+    }
 %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

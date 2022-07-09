@@ -25,7 +25,7 @@ public class HelloServlet extends HttpServlet {
         super.init();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/project3", "client", "client");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/project3", "root", "Owaako29!");
             statement = connection.createStatement();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -40,8 +40,9 @@ public class HelloServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String textBox = request.getParameter("textBox");
         String textBoxLowerCase = textBox.toLowerCase();
-        String result = null;
+        String result;
 
+        HttpSession session = request.getSession();
         // EXECUTION (FAIL/GOOD) TEXT
         String execute = "<div class = \"executionContainer\"><p class = \"executionText\">Awaiting command...</p></div>";
 
@@ -49,37 +50,58 @@ public class HelloServlet extends HttpServlet {
 
         String text = "";
         if (buttonClicked.equals("Execute")) {
-            int flag = 0;
             //check to see if it is a select statement
             if (textBoxLowerCase.contains("select")) {
                 try {
                     result = doSelectQuery(textBoxLowerCase);
-                    flag = 1;
+                    session.setAttribute("result", result);
+                    execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Command Successful</p></div>";
                 } catch (SQLException e) {
                     execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">" + e.getMessage() + "</p></div>";
                     e.printStackTrace();
                 }
 
-                if (flag == 1)
-                    execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Command Successful</p></div>";
-
+                session.setAttribute("execute", execute);
             }
+            else if (textBoxLowerCase.equals("")) {
+                execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Empty command</p></div>";
+                session.setAttribute("execute", execute);
+            }
+            // UPDATE STATEMENTS
             else {
-                execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">Invalid Command</p></div>";
+                //execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">Invalid Command</p></div>";
+                //session.setAttribute("execute", execute);
+
+                try {
+                    execute = doUpdateQuery(textBoxLowerCase);
+                    session.setAttribute("execute", execute);
+
+                    //execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Command Successful</p></div>";
+
+                }catch(SQLException e) {
+                    execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">" + e.getMessage() + "</p></div>";
+                    e.printStackTrace();
+                }
+
+                session.setAttribute("execute", execute);
             }
 
             text = textBox;
+            session.setAttribute("textBox", text);
         }
         else if (buttonClicked.equals("Clear")) {
             text = "";
+            session.setAttribute("textBox", text);
         }
+        else if (buttonClicked.equals("Reset Table")) {
+            result = null;
+            session.setAttribute("result", result);
+
+            execute = "<div class = \"executionContainer\"><p class = \"executionText\">Table cleared...</p></div>";
+            session.setAttribute("execute", execute);
+        }
+
         System.out.println(buttonClicked);
-
-        HttpSession session = request.getSession();
-
-        session.setAttribute("result", result);
-        session.setAttribute("textBox", text);
-        session.setAttribute("execute", execute);
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
         dispatcher.forward(request, response);
@@ -127,6 +149,61 @@ public class HelloServlet extends HttpServlet {
         String tableClosingHTML = "</table>";
         result = tableOpeningHTML + tableColumnsHTML + tableBodyHTML + tableClosingHTML;
 
+        return result;
+    }
+
+    private String doUpdateQuery(String textBoxLowerCase) throws SQLException {
+        String result = null;
+        int numOfRowsUpdated = 0;
+
+        //get number of shipment with quantity >= 100 before update/insert
+        ResultSet beforeQuantityCheck = statement.executeQuery("select COUNT(*) from shipments where quantity >= 100");
+        beforeQuantityCheck.next();
+        int numOfShipmentsWithQuantityGreaterThan100Before = beforeQuantityCheck.getInt(1);
+
+
+        // CHECK IF SHIPMENTS BEFORE UPDATE TABLE EXISTS
+        DatabaseMetaData meta = connection.getMetaData();
+        ResultSet resultSet = meta.getTables(null, null, "shipmentsBeforeUpdate", new String[] {"TABLE"});
+
+        boolean check = resultSet.next();
+
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        // DROP THE TEMPORARY TABLE
+        if (check) {
+            statement.executeUpdate("drop table shipmentsBeforeUpdate");
+        }
+
+        //create temp table for the case of updating suppliers status's
+        statement.executeUpdate("create table shipmentsBeforeUpdate like shipments");
+        //copy table over to new temp table
+        statement.executeUpdate("insert into shipmentsBeforeUpdate select * from shipments");
+
+        result = "<div class = \"executionContainer\"><p class = \"executionText\">";
+        //execute update
+        numOfRowsUpdated = statement.executeUpdate(textBoxLowerCase);
+        result += "The statement executed succesfully.</br>" + numOfRowsUpdated + " row(s) affected";
+
+        //get number of shipment with quantity >= 100 before update/insert
+        ResultSet afterQuantityCheck = statement.executeQuery("select COUNT(*) from shipments where quantity >= 100");
+        afterQuantityCheck.next();
+        int numOfShipmentsWithQuantityGreaterThan100After = afterQuantityCheck.getInt(1);
+
+        result += "</br>" + numOfShipmentsWithQuantityGreaterThan100Before + " < " + numOfShipmentsWithQuantityGreaterThan100After;
+
+        //update the status of suppliers if shipment quantity is > 100
+        if(numOfShipmentsWithQuantityGreaterThan100Before < numOfShipmentsWithQuantityGreaterThan100After) {
+            //increase suppliers status by 5
+            //handle updates into shipments by using a left join with shipments and temp table
+            int numberOfRowsAffectedAfterIncrementBy5 = statement.executeUpdate("update suppliers set status = status + 5 where snum in ( select distinct snum from shipments left join shipmentsBeforeUpdate using (snum, pnum, jnum, quantity) where shipmentsBeforeUpdate.snum is null)");
+            result += "</br>Business Logic Detected! - Updating Supplier Status";
+            result += "</br>Business Logic Updated " + numberOfRowsAffectedAfterIncrementBy5 + " Supplier(s) status marks";
+        }
+
+
+
+
+        result += "</p>";
         return result;
     }
 }
