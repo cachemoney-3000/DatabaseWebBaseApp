@@ -1,9 +1,8 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: samon
-  Date: 7/8/2022
-  Time: 3:08 AM
-  To change this template use File | Settings | File Templates.
+Name: Joshua Samontanez
+Course: CNT 4714 – Summer 2022 – Project Three
+Assignment title: A Three-Tier Distributed Web-Based Application
+Date: August 4, 2022
 --%>
 <%
   String execute = (String) session.getAttribute("execute");
