@@ -1,8 +1,7 @@
 /*
-  Sortable
-  version 2
+  Sortable version 2
   7th April 2007
-  Stuart Langridge, http://www.kryogenix.org/code/browser/sorttable/
+  Created by: Stuart Langridge, http://www.kryogenix.org/code/browser/sorttable/
 
   Thanks to many, many people for contributions and suggestions.
   Licenced as X11: http://www.kryogenix.org/code/browser/licence.html
