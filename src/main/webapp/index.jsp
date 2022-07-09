@@ -8,20 +8,19 @@
 <%
     String textBox = (String) session.getAttribute("textBox");
     String result = (String) session.getAttribute("result");
+    String execute = (String) session.getAttribute("execute");
+
     if(result == null){
         result = "";
     }
     if(textBox == null){
         textBox = "";
     }
-%>
-
-<%
-    String execute = (String) session.getAttribute("execute");
     if(execute == null){
         execute = "";
     }
 %>
+
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -42,12 +41,12 @@
 </div>
 
 <div class = "connectionContainer">
-    <p class = "connectionText">You are connected to the Project 3 Enterprise System Database as a root-level user</p>
+    <p class = "connectionText">You are connected to the Project 3 Enterprise System Database as a client-level user</p>
 </div>
 
 <body style="background-color: #222b45;">
 <div class = "Hbox">
-    <form action="root" method="post">
+    <form action="client" method="post">
         <div class>
             <br/>
             <textarea type = "text" name="textBox" id="textBox" class = "textarea" placeholder = "Type your SQL commands here" rows="4" cols="50"><%= textBox %></textarea>
@@ -71,7 +70,7 @@
 </div>
 
 
-<script  src="./sorttable.js"></script>
+<script  src="./sortable.js"></script>
 </body>
 </html>
 

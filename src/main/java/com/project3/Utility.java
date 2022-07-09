@@ -1,42 +1,20 @@
-package com.example.demo;
+package com.project3;
 
-import java.io.*;
-import java.sql.*;
-import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.UnavailableException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.Objects;
-import java.util.Vector;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class RootServlet extends HttpServlet {
-    private Connection connection;
-    private Statement statement;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/project3", "root", "Owaako29!");
-            statement = connection.createStatement();
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+public class Utility {
+    private final Statement statement;
+    public Utility (Statement statement) {
+        this.statement = statement;
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPostHelper(HttpServletRequest request, String userType) {
         // Get the query from the text box
         String textBox = request.getParameter("textBox");
         String query = textBox.toLowerCase();
@@ -51,14 +29,14 @@ public class RootServlet extends HttpServlet {
         switch (buttonClicked) {
             // User clicked the execute button
             case "Execute":
-                executeClicked(query, session, textBox);
+                executeClicked(query, session, textBox, userType);
                 break;
             // User clicked the clear button
             case "Clear":
                 // Clear the textBox
                 text = "";
                 session.setAttribute("textBox", text);
-                execute = "<div class = \"executionContainer\"><p class = \"executionText\"></p></div>";
+                execute = "<div class = \"executionContainer\"><p class = \"executionText\">Text box cleared...</p></div>";
                 session.setAttribute("execute", execute);
                 break;
             // User clicked the reset table button
@@ -67,21 +45,17 @@ public class RootServlet extends HttpServlet {
                 result = null;
                 session.setAttribute("result", result);
                 // Show that the table was cleared
-                execute = "<div class = \"executionContainer\"><p class = \"executionText\">Table cleared.</p></div>";
+                execute = "<div class = \"executionContainer\"><p class = \"executionText\">Table cleared...</p></div>";
                 session.setAttribute("execute", execute);
                 break;
         }
 
         System.out.println(buttonClicked);
-
-        // Insert the update to the .jsp file
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
-        dispatcher.forward(request, response);
     }
 
-    public void executeClicked(String query, HttpSession session, String textBox) {
+    private void executeClicked(String query, HttpSession session, String textBox, String userType) {
         String result;
-        String execute;
+        String execute = null;
         String text;
 
         // Check if the query is SELECT
@@ -92,31 +66,36 @@ public class RootServlet extends HttpServlet {
                 // Update the table
                 session.setAttribute("result", result);
                 // Show to the user that the command was successful
-                execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Command Successful.</p></div>";
+                execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Command Successful</p></div>";
             } catch (SQLException e) {
                 // Show any errors to the user
                 execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">" + e.getMessage() + "</p></div>";
-                //e.printStackTrace();
+                e.printStackTrace();
             }
             session.setAttribute("execute", execute);
         }
         // If the execute button was clicked and there is no query
         else if (query.equals("")) {
             // Tell the user that there are no query entered
-            execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Empty query. Unsuccessful command.</p></div>";
+            execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Unsuccessful command: there are no queries no process</p></div>";
             session.setAttribute("execute", execute);
         }
         // If none of the above, then the query must be an UPDATE
         else {
-            try {
-                // Run the update query
-                execute = updateQuery(query);
-                // Show the user what how many records was updated
-                session.setAttribute("execute", execute);
-            }catch(SQLException e) {
-                // Show any errors to the user
-                execute = "<div class = \"executionContainerBad\">TextBox cleared.<p class = \"executionText\">" + e.getMessage() + "</p></div>";
-                //e.printStackTrace();
+            if (userType.equals("client")) {
+                execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">SELECT is the only command allowed for client-user</p></div>";
+            }
+            else if (userType.equals("root")){
+                try {
+                    // Run the update query
+                    execute = updateQuery(textBox);
+                    // Show the user what how many records was updated
+                    session.setAttribute("execute", execute);
+                }catch(SQLException e) {
+                    // Show any errors to the user
+                    execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">" + e.getMessage() + "</p></div>";
+                    e.printStackTrace();
+                }
             }
             session.setAttribute("execute", execute);
         }
@@ -126,8 +105,8 @@ public class RootServlet extends HttpServlet {
         session.setAttribute("textBox", text);
     }
 
-    // execute a select query and create table html with resultset
-    public String selectQuery(String input) throws SQLException {
+
+    private String selectQuery(String input) throws SQLException {
         StringBuilder result = new StringBuilder();
         // Execute and process the query
         ResultSet table = statement.executeQuery(input);
@@ -206,6 +185,4 @@ public class RootServlet extends HttpServlet {
         // Store the count of shipments greater or equal than 100 here
         return before.getInt(1);
     }
-
-
 }

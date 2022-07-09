@@ -6,11 +6,20 @@
 
     <servlet>
         <servlet-name>RootServlet</servlet-name>
-        <servlet-class>com.example.demo.RootServlet</servlet-class>
+        <servlet-class>com.project3.RootServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RootServlet</servlet-name>
         <url-pattern>/root</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ClientServlet</servlet-name>
+        <servlet-class>com.project3.ClientServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClientServlet</servlet-name>
+        <url-pattern>/client</url-pattern>
     </servlet-mapping>
 
 </web-app>
