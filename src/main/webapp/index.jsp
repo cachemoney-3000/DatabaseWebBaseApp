@@ -47,7 +47,7 @@
 
 <body style="background-color: #222b45;">
 <div class = "Hbox">
-    <form action="hello" method="post">
+    <form action="root" method="post">
         <div class>
             <br/>
             <textarea type = "text" name="textBox" id="textBox" class = "textarea" placeholder = "Type your SQL commands here" rows="4" cols="50"><%= textBox %></textarea>
@@ -61,8 +61,9 @@
     </form>
 </div>
 
-<%= execute %>
-
+<div>
+    <%= execute %>
+</div>
 
 <div class = "tableResult">
     <%-- jsp statement with out sql response--%>

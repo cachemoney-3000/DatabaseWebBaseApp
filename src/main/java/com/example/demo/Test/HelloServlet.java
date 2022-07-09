@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Test;
 
 import java.io.*;
 import java.sql.*;
@@ -15,7 +15,7 @@ import java.sql.DriverManager;
 import java.util.Objects;
 import java.util.Vector;
 
-@WebServlet("/hello")
+//@WebServlet("hello")
 public class HelloServlet extends HttpServlet {
     private Connection connection;
     private Statement statement;
@@ -153,7 +153,7 @@ public class HelloServlet extends HttpServlet {
     }
 
     private String doUpdateQuery(String textBoxLowerCase) throws SQLException {
-        String result = null;
+        StringBuilder result = new StringBuilder();
         int numOfRowsUpdated = 0;
 
         //get number of shipment with quantity >= 100 before update/insert
@@ -162,48 +162,40 @@ public class HelloServlet extends HttpServlet {
         int numOfShipmentsWithQuantityGreaterThan100Before = beforeQuantityCheck.getInt(1);
 
 
-        // CHECK IF SHIPMENTS BEFORE UPDATE TABLE EXISTS
-        DatabaseMetaData meta = connection.getMetaData();
-        ResultSet resultSet = meta.getTables(null, null, "shipmentsBeforeUpdate", new String[] {"TABLE"});
-
-        boolean check = resultSet.next();
-
         statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
-        // DROP THE TEMPORARY TABLE
-        if (check) {
-            statement.executeUpdate("drop table shipmentsBeforeUpdate");
-        }
+
+
 
         //create temp table for the case of updating suppliers status's
         statement.executeUpdate("create table shipmentsBeforeUpdate like shipments");
         //copy table over to new temp table
         statement.executeUpdate("insert into shipmentsBeforeUpdate select * from shipments");
 
-        result = "<div class = \"executionContainer\"><p class = \"executionText\">";
+        result.append("<div class = \"executionContainer\"><p class = \"executionText\">");
         //execute update
         numOfRowsUpdated = statement.executeUpdate(textBoxLowerCase);
-        result += "The statement executed succesfully.</br>" + numOfRowsUpdated + " row(s) affected";
+        result.append("The statement executed succesfully.</br>").append(numOfRowsUpdated).append(" row(s) affected");
 
         //get number of shipment with quantity >= 100 before update/insert
         ResultSet afterQuantityCheck = statement.executeQuery("select COUNT(*) from shipments where quantity >= 100");
         afterQuantityCheck.next();
         int numOfShipmentsWithQuantityGreaterThan100After = afterQuantityCheck.getInt(1);
 
-        result += "</br>" + numOfShipmentsWithQuantityGreaterThan100Before + " < " + numOfShipmentsWithQuantityGreaterThan100After;
+        result.append("</br>").append(numOfShipmentsWithQuantityGreaterThan100Before).append(" < ").append(numOfShipmentsWithQuantityGreaterThan100After);
 
         //update the status of suppliers if shipment quantity is > 100
         if(numOfShipmentsWithQuantityGreaterThan100Before < numOfShipmentsWithQuantityGreaterThan100After) {
             //increase suppliers status by 5
             //handle updates into shipments by using a left join with shipments and temp table
             int numberOfRowsAffectedAfterIncrementBy5 = statement.executeUpdate("update suppliers set status = status + 5 where snum in ( select distinct snum from shipments left join shipmentsBeforeUpdate using (snum, pnum, jnum, quantity) where shipmentsBeforeUpdate.snum is null)");
-            result += "</br>Business Logic Detected! - Updating Supplier Status";
-            result += "</br>Business Logic Updated " + numberOfRowsAffectedAfterIncrementBy5 + " Supplier(s) status marks";
+            result.append("</br>Business Logic Detected! - Updating Supplier Status");
+            result.append("</br>Business Logic Updated ").append(numberOfRowsAffectedAfterIncrementBy5).append(" Supplier(s) status marks");
         }
 
 
+        statement.executeUpdate("drop table shipmentsBeforeUpdate");
 
-
-        result += "</p>";
-        return result;
+        result.append("</p>");
+        return result.toString();
     }
 }
