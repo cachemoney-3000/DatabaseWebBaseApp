@@ -7,6 +7,7 @@
     <servlet>
         <servlet-name>RootServlet</servlet-name>
         <servlet-class>com.project3.RootServlet</servlet-class>
+        <jsp-file>/root.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>RootServlet</servlet-name>
@@ -20,6 +21,15 @@
     <servlet-mapping>
         <servlet-name>ClientServlet</servlet-name>
         <url-pattern>/client</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DataEntryServlet</servlet-name>
+        <servlet-class>com.project3.DataEntryServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DataEntryServlet</servlet-name>
+        <url-pattern>/data-entry</url-pattern>
     </servlet-mapping>
 
 </web-app>

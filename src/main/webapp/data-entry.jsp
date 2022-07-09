@@ -5,13 +5,21 @@
   Time: 3:08 AM
   To change this template use File | Settings | File Templates.
 --%>
+<%
+  String execute = (String) session.getAttribute("execute");
+
+  if(execute == null){
+    execute = "";
+  }
+%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
   <title>DataInput</title>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="data-entry/style.css">
 </head>
 
 <body style="background-color: #222b45;">
@@ -23,45 +31,37 @@
 </div>
 
 <div class = "connectionContainer">
-  <p class = "connectionText">You are connected to the Project 3 Enterprise System Database as a user-level user</p>
+  <p class = "connectionText">You are connected to the Project 3 Enterprise System Database as a data-entry-level user</p>
 </div>
 
 <div class = "Hbox">
-  <div class = "forms">
-    <form class="form-inline">
+  <form class = "forms" action="data-entry", method="get">
+    <div class = "form-inline">
       <label for = "snum">SNUM</label>
       <input name="snum" id="snum" placeholder="Enter snum" name="email">
-    </form>
-
-    <form class="form-inline">
+    </div>
+    <div class = "form-inline">
       <label for = "pnum">PNUM</label>
       <input name="pnum" id="pnum" placeholder="Enter pnum">
-    </form>
-
-    <form class="form-inline">
+    </div>
+    <div class = "form-inline">
       <label for = "jnum">JNUM</label>
       <input name="jnum" id="jnum" placeholder="Enter jnum">
-    </form>
-
-    <form class="form-inline">
+    </div>
+    <div class = "form-inline">
       <label for = "quantity">QUANTITY</label>
       <input name="quantity" id="quantity" placeholder="Enter quantity">
-    </form>
+    </div>
 
     <div class = "container">
-      <button name="clearButton" id="clearButton"  class = "clearButton">Clear</button>
-      <button name="executeButton" id="executeButton" class = "executeButton">Execute</button>
+      <input type = "submit" name="button_clicked" id="clearButton"  class = "clearButton" value = "Clear">
+      <input type = "submit" name="button_clicked" id="executeButton" class = "executeButton" value = "Execute">
     </div>
-  </div>
+  </form>
 </div>
 
-<div class = "executionContainer">
-  <p class = "executionText">Command executed successfully
-    </br> 999 row(s) affected
-    </br> Business logic detected! - Updating supplier status
-    </br> Business logic updated 999 supplier(s) status marks
-  </p>
+<div>
+  <%= execute %>
 </div>
 </body>
 </html>
-

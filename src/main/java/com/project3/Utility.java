@@ -53,7 +53,7 @@ public class Utility {
         System.out.println(buttonClicked);
     }
 
-    private void executeClicked(String query, HttpSession session, String textBox, String userType) {
+    public void executeClicked(String query, HttpSession session, String textBox, String userType) {
         String result;
         String execute = null;
         String text;
@@ -85,10 +85,10 @@ public class Utility {
             if (userType.equals("client")) {
                 execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">SELECT is the only command allowed for client-user</p></div>";
             }
-            else if (userType.equals("root")){
+            else if (userType.equals("root") || userType.equals("dataentry")){
                 try {
                     // Run the update query
-                    execute = updateQuery(textBox);
+                    execute = updateQuery(textBox, userType);
                     // Show the user what how many records was updated
                     session.setAttribute("execute", execute);
                 }catch(SQLException e) {
@@ -101,8 +101,10 @@ public class Utility {
         }
 
         // Keep the text inside the textBox
-        text = textBox;
-        session.setAttribute("textBox", text);
+        if (!userType.equals("dataentry")){
+            text = textBox;
+            session.setAttribute("textBox", text);
+        }
     }
 
 
@@ -139,19 +141,22 @@ public class Utility {
         return result.toString();
     }
 
-    private String updateQuery(String input) throws SQLException {
+    private String updateQuery(String input, String userType) throws SQLException {
         StringBuilder result = new StringBuilder();
         int numRowsUpdated = 0;
 
         // Removes the bug that stops any insert queries for the table shipments
-        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        //statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
         // Store the count of shipments greater or equal than 100 here
         int numShipmentBefore = getNumShipments();
 
-        // Create a temporary table to keep track of the number of shipments
-        statement.executeUpdate("CREATE TABLE tempTable LIKE shipments");
-        // Copy all the contents of shipments to the tempTable
-        statement.executeUpdate("INSERT INTO tempTable SELECT * FROM shipments");
+        if (!userType.equals("dataentry")) {
+            // Create a temporary table to keep track of the number of shipments
+            statement.executeUpdate("CREATE TABLE tempTable LIKE shipments");
+            // Copy all the contents of shipments to the tempTable
+            statement.executeUpdate("INSERT INTO tempTable SELECT * FROM shipments");
+        }
+
 
         // Execute the query
         result.append("<div class = \"executionContainer\"><p class = \"executionText\">");
@@ -162,7 +167,7 @@ public class Utility {
         int numShipmentAfter = getNumShipments();
 
         // Update the status of the suppliers if the shipment quantity exceeds 100
-        if (numShipmentBefore < numShipmentAfter) {
+        if (numShipmentBefore < numShipmentAfter && !userType.equals("dataentry")) {
             int numRowsAffected = statement.executeUpdate("UPDATE suppliers SET status = status + 5 WHERE snum IN " +
                     "(SELECT DISTINCT snum FROM shipments LEFT JOIN tempTable USING (snum, pnum, jnum, quantity) " +
                     "WHERE tempTable.snum IS NULL)");
@@ -171,8 +176,10 @@ public class Utility {
             result.append("</br>Business Logic Updated ").append(numRowsAffected).append(" Supplier(s) status marks");
         }
 
-        // Delete the temporary table
-        statement.executeUpdate("DROP TABLE tempTable");
+        if (!userType.equals("dataentry")){
+            // Delete the temporary table
+            statement.executeUpdate("DROP TABLE tempTable");
+        }
 
         result.append("</p>");
         return result.toString();

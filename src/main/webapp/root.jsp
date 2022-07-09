@@ -28,7 +28,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Root-user</title>
-  <link rel="stylesheet" href="./root/style.css">
+  <link rel="stylesheet" href="styles/style.css">
   <title>Root user</title>
 </head>
 <body>

@@ -26,7 +26,7 @@ public class ClientServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/client.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -35,7 +35,7 @@ public class ClientServlet extends HttpServlet {
         utility.doPostHelper(request, "client");
 
         // Insert the update to the .jsp file
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/client.jsp");
         dispatcher.forward(request, response);
     }
 }
