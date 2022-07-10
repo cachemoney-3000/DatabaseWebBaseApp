@@ -39,8 +39,13 @@ Date: August 4, 2022
     <h2 style="color:#e2dce4;">A Servlet/JSP-based multi-tiered enterprise application using Tomcat container</h2>
 </div>
 
-<div class = "connectionContainer">
-    <p class = "connectionText">You are connected to the Project 3 Enterprise System Database as a client-level user</p>
+<div class = "Vbox">
+    <div class = "container">
+        <div class = "connectionContainer">
+            <label class = "connectionText">You are connected to the Project 3 Enterprise System Database as a data-entry user</label>
+        </div>
+        <input type = "submit" name="logoutButton" id="logoutButton"  class = "logoutButton" value = "Logout">
+    </div>
 </div>
 
 <body style="background-color: #222b45;">

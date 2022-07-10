@@ -80,7 +80,7 @@ public class Utility {
         // If the execute button was clicked and there is no query
         else if (query.equals("")) {
             // Tell the user that there are no query entered
-            execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">Unsuccessful command: there are no queries no process</p></div>";
+            execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">Unsuccessful command: there are no queries to process</p></div>";
             session.setAttribute("execute", execute);
         }
         // If none of the above, then the query must be an UPDATE
