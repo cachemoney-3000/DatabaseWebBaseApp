@@ -5,10 +5,10 @@ Assignment title: A Three-Tier Distributed Web-Based Application
 Date: August 4, 2022
 --%>
 <%
-    String execute = (String) session.getAttribute("execute");
+    String display = (String) session.getAttribute("display");
 
-    if(execute == null){
-        execute = "";
+    if(display == null){
+        display = "";
     }
 %>
 
@@ -18,7 +18,7 @@ Date: August 4, 2022
 <head>
     <meta charset="UTF-8">
     <title>Database Login</title>
-    <link rel="stylesheet" href="./login/style.css">
+    <link rel="stylesheet" href="styles/login-style.css">
 
 </head>
 <body>
@@ -40,7 +40,8 @@ Date: August 4, 2022
 </div>
 
 <div class = "Hbox">
-    <form class = "forms" action="login" method="get">
+    <form class = "forms" action="login" method="post">
+        </br>
         <label class = "logInLabel">Database Login:</label>
         <div class = "form-inline">
             <input name="username" id="username" placeholder="Enter username">
@@ -53,7 +54,7 @@ Date: August 4, 2022
                 <option  disabled selected>Select a properties file</option>
                 <option value="root">Root</option>
                 <option value="client">Client</option>
-                <option value="data">Data-entry</option>
+                <option value="data-entry">Data-entry</option>
             </select>
         </div>
 
@@ -61,6 +62,10 @@ Date: August 4, 2022
             <input type = "submit" name="login" id="login" class = "executeButton" value = "Login">
         </div>
     </form>
+</div>
+
+<div>
+    <%= display %>
 </div>
 
 </body>

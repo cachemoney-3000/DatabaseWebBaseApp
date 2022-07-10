@@ -10,6 +10,8 @@ import java.io.*;
 import java.sql.*;
 
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 
@@ -20,15 +22,14 @@ public class ClientServlet extends HttpServlet {
     private transient Statement statement;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/project3", "client", "client");
-            statement = connection.createStatement();
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        // Get the path of the properties file
+        String filepath = config.getInitParameter("properties");
+        ServletContext context = getServletContext();
+        // Connect to the database
+        Initialize initialize = new Initialize();
+        statement = initialize.initializeServlet(config, context, filepath);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

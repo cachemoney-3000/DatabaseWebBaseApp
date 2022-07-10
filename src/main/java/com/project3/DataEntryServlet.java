@@ -7,6 +7,8 @@ Date: August 4, 2022
 package com.project3;
 
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,15 +26,14 @@ public class DataEntryServlet extends HttpServlet {
     private transient Statement statement;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/project3", "dataentry", "dataentry");
-            statement = connection.createStatement();
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        // Get the path of the properties file
+        String filepath = config.getInitParameter("properties");
+        ServletContext context = getServletContext();
+        // Connect to the database
+        Initialize initialize = new Initialize();
+        statement = initialize.initializeServlet(config, context, filepath);
     }
 
     @Override

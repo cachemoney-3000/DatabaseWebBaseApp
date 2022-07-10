@@ -9,10 +9,7 @@ package com.project3;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Utility {
     private final Statement statement;
@@ -83,7 +80,7 @@ public class Utility {
         // If the execute button was clicked and there is no query
         else if (query.equals("")) {
             // Tell the user that there are no query entered
-            execute = "<div class = \"executionContainerGood\"><p class = \"executionText\">Unsuccessful command: there are no queries no process</p></div>";
+            execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">Unsuccessful command: there are no queries no process</p></div>";
             session.setAttribute("execute", execute);
         }
         // If none of the above, then the query must be an UPDATE

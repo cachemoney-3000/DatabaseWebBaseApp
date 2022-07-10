@@ -4,38 +4,60 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
 
+    <!-- Root Servlet -->
     <servlet>
         <servlet-name>RootServlet</servlet-name>
         <servlet-class>com.project3.RootServlet</servlet-class>
-        <jsp-file>/root.jsp</jsp-file>
+        <!-- Root Servlet param-->
+        <init-param>
+            <param-name>properties</param-name>
+            <param-value>/WEB-INF/lib/properties/root.properties</param-value>
+        </init-param>
     </servlet>
+    <!-- Root Servlet mapping -->
     <servlet-mapping>
         <servlet-name>RootServlet</servlet-name>
         <url-pattern>/root</url-pattern>
     </servlet-mapping>
 
+    <!-- Client Servlet -->
     <servlet>
         <servlet-name>ClientServlet</servlet-name>
         <servlet-class>com.project3.ClientServlet</servlet-class>
+        <!-- Client Servlet param-->
+        <init-param>
+            <param-name>properties</param-name>
+            <param-value>/WEB-INF/lib/properties/client.properties</param-value>
+        </init-param>
     </servlet>
+    <!-- Client Servlet mapping-->
     <servlet-mapping>
         <servlet-name>ClientServlet</servlet-name>
         <url-pattern>/client</url-pattern>
     </servlet-mapping>
 
+    <!-- Data-entry Servlet -->
     <servlet>
         <servlet-name>DataEntryServlet</servlet-name>
         <servlet-class>com.project3.DataEntryServlet</servlet-class>
+        <!-- Data-entry Servlet param-->
+        <init-param>
+            <param-name>properties</param-name>
+            <param-value>/WEB-INF/lib/properties/data-entry.properties</param-value>
+        </init-param>
     </servlet>
+    <!-- Data-entry Servlet mapping-->
     <servlet-mapping>
         <servlet-name>DataEntryServlet</servlet-name>
         <url-pattern>/data-entry</url-pattern>
     </servlet-mapping>
 
+    <!-- Login Servlet -->
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.project3.LoginServlet</servlet-class>
     </servlet>
+    <!-- Login Servlet mapping -->
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
