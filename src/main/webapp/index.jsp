@@ -17,8 +17,18 @@ Date: August 4, 2022
 <html lang="en" >
 <head>
     <meta charset="UTF-8">
+    <title>Database Login</title>
+    <link rel="stylesheet" href="./login/style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
     <title>DataInput</title>
-    <link rel="stylesheet" href="data-entry/style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body style="background-color: #222b45;">
@@ -29,38 +39,33 @@ Date: August 4, 2022
     <h2 style="color:#e2dce4;">A Servlet/JSP-based multi-tiered enterprise application using Tomcat container</h2>
 </div>
 
-<div class = "connectionContainer">
-    <p class = "connectionText">You are connected to the Project 3 Enterprise System Database as a data-entry-level user</p>
-</div>
-
 <div class = "Hbox">
-    <form class = "forms" action="data-entry", method="get">
+    <form class = "forms" action="login" method="get">
+        <label class = "logInLabel">Database Login:</label>
         <div class = "form-inline">
-            <label for = "snum">SNUM</label>
-            <input name="snum" id="snum" placeholder="Enter snum" name="email">
+            <input name="username" id="username" placeholder="Enter username">
         </div>
         <div class = "form-inline">
-            <label for = "pnum">PNUM</label>
-            <input name="pnum" id="pnum" placeholder="Enter pnum">
+            <input name="password" id="password" placeholder="Enter password">
         </div>
         <div class = "form-inline">
-            <label for = "jnum">JNUM</label>
-            <input name="jnum" id="jnum" placeholder="Enter jnum">
-        </div>
-        <div class = "form-inline">
-            <label for = "quantity">QUANTITY</label>
-            <input name="quantity" id="quantity" placeholder="Enter quantity">
+            <select  class = "dropbtn" name="properties" id="properties" value = "Execute">
+                <option  disabled selected>Select a properties file</option>
+                <option value="root">Root</option>
+                <option value="client">Client</option>
+                <option value="data">Data-entry</option>
+            </select>
         </div>
 
         <div class = "container">
-            <input type = "submit" name="button_clicked" id="clearButton"  class = "clearButton" value = "Clear">
-            <input type = "submit" name="button_clicked" id="executeButton" class = "executeButton" value = "Execute">
+            <input type = "submit" name="login" id="login" class = "executeButton" value = "Login">
         </div>
     </form>
 </div>
 
-<div>
-    <%= execute %>
-</div>
+</body>
+</html>
+<!-- partial -->
+
 </body>
 </html>

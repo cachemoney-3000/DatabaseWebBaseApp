@@ -18,7 +18,7 @@ Date: August 4, 2022
 <head>
   <meta charset="UTF-8">
   <title>DataInput</title>
-  <link rel="stylesheet" href="data-entry/style.css">
+  <link rel="stylesheet" href="styles/data-entry-style.css">
 </head>
 
 <body style="background-color: #222b45;">
