@@ -227,3 +227,7 @@ input, label {
     font-weight: bold;
     margin-bottom: -3px;
 }
+
+.button-inline {
+    display: inline-block;
+}

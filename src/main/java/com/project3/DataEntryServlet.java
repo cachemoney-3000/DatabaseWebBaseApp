@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.ws.rs.core.Request;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -95,8 +96,22 @@ public class DataEntryServlet extends HttpServlet {
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/data-entry.jsp");
         dispatcher.forward(request, response);
     }
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String buttonClicked = request.getParameter("logoutButton");
+        String path = "/data-entry.jsp";
+        // Change the path
+        if (buttonClicked.equals("Logout")){
+            path = "/index.jsp";
+        }
+
+        // Invalidate the session when logging out
+        HttpSession session = request.getSession();
+        session.invalidate();
+
+        // Forward the dispatcher based on the path String
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(path);
+        dispatcher.forward(request, response);
     }
 }

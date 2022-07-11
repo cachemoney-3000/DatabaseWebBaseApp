@@ -27,7 +27,7 @@ Date: August 4, 2022
 <head>
     <meta charset="UTF-8">
     <title>Root-user</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/rootStyle.css">
     <title>Client user</title>
 </head>
 <body>
@@ -39,12 +39,14 @@ Date: August 4, 2022
     <h2 style="color:#e2dce4;">A Servlet/JSP-based multi-tiered enterprise application using Tomcat container</h2>
 </div>
 
-<div class = "Vbox">
+<div class = "Hbox">
     <div class = "container">
         <div class = "connectionContainer">
-            <label class = "connectionText">You are connected to the Project 3 Enterprise System Database as a data-entry user</label>
+            <label class = "connectionText">You are connected to the Project 3 Enterprise System Database as a client user</label>
         </div>
-        <input type = "submit" name="logoutButton" id="logoutButton"  class = "logoutButton" value = "Logout">
+        <form action="client" method="get" class = "button-inline">
+            <input type = "submit" value = "Logout" name="logoutButton" id="logoutButton"  class = "logoutButton">
+        </form>
     </div>
 </div>
 

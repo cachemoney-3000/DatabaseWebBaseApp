@@ -6,6 +6,7 @@ Date: August 4, 2022
 
 package com.project3;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,7 +31,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         String properties = request.getParameter("properties");
         HttpSession session = request.getSession();
-        String location = "index.jsp";
+        String location = "/index.jsp";
 
         System.out.println(username + " " + password + " " + properties);
 
@@ -39,7 +40,9 @@ public class LoginServlet extends HttpServlet {
             location = validate(username, password, properties, location, session);
 
 
-        response.sendRedirect(location);
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(location);
+        dispatcher.forward(request, response);
+        //response.sendRedirect(location);
     }
 
     private String validate(String username, String password, String properties, String location, HttpSession session){
@@ -77,7 +80,7 @@ public class LoginServlet extends HttpServlet {
 
             // If the user put the correct credential, go to a specific jsp based on the properties type
             if (user.equals(username) && pass.equals(password)) {
-                location = properties + ".jsp";
+                location = "/" + properties + ".jsp";
             }
             // Display a message that the password or username is wrong
             else {

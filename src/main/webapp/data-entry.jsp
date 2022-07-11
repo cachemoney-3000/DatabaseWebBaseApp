@@ -18,7 +18,7 @@ Date: August 4, 2022
 <head>
   <meta charset="UTF-8">
   <title>DataInput</title>
-  <link rel="stylesheet" href="styles/data_style.css">
+  <link rel="stylesheet" href="styles/dataStyle.css">
 </head>
 
 <body style="background-color: #222b45;">
@@ -34,7 +34,9 @@ Date: August 4, 2022
     <div class = "connectionContainer">
       <label class = "connectionText">You are connected to the Project 3 Enterprise System Database as a data-entry user</label>
     </div>
-    <input type = "submit" name="logoutButton" id="logoutButton"  class = "logoutButton" value = "Logout">
+    <form action="data-entry" method="post" class="button-inline">
+      <input type = "submit" value = "Logout" name="logoutButton" id="logoutButton"  class = "logoutButton">
+    </form>
   </div>
 </div>
 

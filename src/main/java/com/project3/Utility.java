@@ -6,6 +6,7 @@ Date: August 4, 2022
 
 package com.project3;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -85,9 +86,11 @@ public class Utility {
         }
         // If none of the above, then the query must be an UPDATE
         else {
+            // Display error if the client user try to execute an UPDATE query
             if (userType.equals("client")) {
                 execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">SELECT is the only command allowed for client-user</p></div>";
             }
+            // root and dataentry users have access to UPDATE query
             else if (userType.equals("root") || userType.equals("dataentry")){
                 try {
                     // Run the update query
