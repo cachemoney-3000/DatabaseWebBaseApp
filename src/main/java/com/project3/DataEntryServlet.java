@@ -83,7 +83,7 @@ public class DataEntryServlet extends HttpServlet {
             }
             // If there is one or more fields empty, display error to the user
             else {
-                execute = "<div class = \"executionContainer\"><p class = \"executionText\">Error: One of the input fields are empty</p></div>";
+                execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">Error: One of the input fields are empty</p></div>";
                 session.setAttribute("execute", execute);
             }
         }
@@ -101,9 +101,12 @@ public class DataEntryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String buttonClicked = request.getParameter("logoutButton");
         String path = "/data-entry.jsp";
-        // Change the path
+
+        // Change the path and close the database when logout button is clicked
+        System.out.println(buttonClicked);
         if (buttonClicked.equals("Logout")){
-            path = "/index.jsp";
+            Utility utility = new Utility(statement);
+            path  = utility.logout(request);
         }
 
         // Invalidate the session when logging out

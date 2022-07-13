@@ -32,15 +32,13 @@ public class RootServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String buttonClicked = request.getParameter("logoutButton");
         String path = "/root.jsp";
-        // Change the path
+
+        // Change the path and close the database when logout button is clicked
         System.out.println(buttonClicked);
         if (buttonClicked.equals("Logout")){
-            path = "/index.jsp";
+            Utility utility = new Utility(statement);
+            path  = utility.logout(request);
         }
-
-        // Invalidate the session when logging out
-        HttpSession session = request.getSession();
-        session.invalidate();
 
         // Forward the dispatcher based on the path String
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(path);

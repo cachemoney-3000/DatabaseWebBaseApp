@@ -6,7 +6,6 @@ Date: August 4, 2022
 
 package com.project3;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -151,7 +150,6 @@ public class Utility {
         StringBuilder result = new StringBuilder();
         int numRowsUpdated = 0;
 
-        // Removes the bug that stops any insert queries for the table shipments
         //statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
         // Store the count of shipments greater or equal than 100 here
         int numShipmentBefore = getNumShipments();
@@ -197,5 +195,28 @@ public class Utility {
         before.next();
         // Store the count of shipments greater or equal than 100 here
         return before.getInt(1);
+    }
+
+    public String logout(HttpServletRequest request){
+        String path = "/index.jsp";
+
+        // Close the connection when logging out
+        Connection connection;
+        try {
+            connection = statement.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Invalidate the session when logging out
+        HttpSession session = request.getSession();
+        session.invalidate();
+
+        return path;
     }
 }
