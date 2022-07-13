@@ -44,19 +44,19 @@ Date: August 4, 2022
   <form class = "forms" action="data-entry", method="get">
     <div class = "form-inline">
       <label for = "snum">SNUM</label>
-      <input name="snum" id="snum" placeholder="Enter snum" name="email">
+      <input name="snum" id="snum" placeholder="Enter snum" name="email" required>
     </div>
     <div class = "form-inline">
       <label for = "pnum">PNUM</label>
-      <input name="pnum" id="pnum" placeholder="Enter pnum">
+      <input name="pnum" id="pnum" placeholder="Enter pnum" required>
     </div>
     <div class = "form-inline">
       <label for = "jnum">JNUM</label>
-      <input name="jnum" id="jnum" placeholder="Enter jnum">
+      <input name="jnum" id="jnum" placeholder="Enter jnum" required>
     </div>
     <div class = "form-inline">
       <label for = "quantity">QUANTITY</label>
-      <input name="quantity" id="quantity" placeholder="Enter quantity">
+      <input name="quantity" id="quantity" placeholder="Enter quantity" required>
     </div>
 
     <div class = "container">

@@ -18,7 +18,7 @@ Date: August 4, 2022
 <head>
     <meta charset="UTF-8">
     <title>Database Login</title>
-    <link rel="stylesheet" href="styles/login-style.css">
+    <link rel="stylesheet" href="styles/loginStyle.css">
 
 </head>
 <body>
@@ -44,10 +44,10 @@ Date: August 4, 2022
         </br>
         <label class = "logInLabel">Database Login:</label>
         <div class = "form-inline">
-            <input name="username" id="username" placeholder="Enter username">
+            <input name="username" id="username" placeholder="Enter username" required>
         </div>
         <div class = "form-inline">
-            <input name="password" id="password" placeholder="Enter password">
+            <input type = "password" name="password" id="password" placeholder="Enter password" required>
         </div>
         <div class = "form-inline">
             <select  class = "dropbtn" name="properties" id="properties" value = "Execute">
