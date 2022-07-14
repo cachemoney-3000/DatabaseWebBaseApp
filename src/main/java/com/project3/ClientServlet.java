@@ -9,7 +9,6 @@ package com.project3;
 import java.io.*;
 import java.sql.*;
 
-import com.mysql.cj.util.Util;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
@@ -27,7 +26,11 @@ public class ClientServlet extends HttpServlet {
         ServletContext context = getServletContext();
         // Connect to the database
         Initialize initialize = new Initialize();
-        statement = initialize.initializeServlet(config, context, filepath);
+        try {
+            statement = initialize.initializeServlet(config, context, filepath);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -50,7 +53,15 @@ public class ClientServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Utility utility = new Utility(statement);
-        utility.doPostHelper(request, "client");
+        try {
+            utility.doPostHelper(request, "client");
+        } catch (SQLException e) {
+            // Show the error to the user
+            String execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">" + e.getMessage() + "</p></div>";
+            e.printStackTrace();
+            HttpSession session = request.getSession();
+            session.setAttribute("execute", execute);
+        }
 
 
         // Insert the update to the .jsp file

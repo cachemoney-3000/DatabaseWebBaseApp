@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 
@@ -30,7 +31,11 @@ public class DataEntryServlet extends HttpServlet {
         ServletContext context = getServletContext();
         // Connect to the database
         Initialize initialize = new Initialize();
-        statement = initialize.initializeServlet(config, context, filepath);
+        try {
+            statement = initialize.initializeServlet(config, context, filepath);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -49,7 +54,7 @@ public class DataEntryServlet extends HttpServlet {
 
         // If the user clicked the execute button, run the query
         if (buttonClicked.equals("Execute")) {
-            // Check if all the fields are filled
+            // If all fields are filled, execute the query
             if (!Objects.equals(jnum, "") && !Objects.equals(snum, "") && !Objects.equals(pnum, "") && !Objects.equals(quantity, "")) {
                 System.out.println(snum + " " + jnum + " " + pnum + " " + quantity);
                 // Convert inputs to uppercase
@@ -73,7 +78,16 @@ public class DataEntryServlet extends HttpServlet {
 
                 // Run the query
                 Utility utility = new Utility(statement);
-                utility.executeClicked(query, session, query, "dataentry");
+                try {
+                    execute = utility.updateQueryDataEntry(query, q);
+                    // Show the user what how many records was updated
+                    session.setAttribute("execute", execute);
+                } catch (SQLException e) {
+                    // Show any errors to the user
+                    execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">" + e.getMessage() + "</p></div>";
+                    e.printStackTrace();
+                    session.setAttribute("execute", execute);
+                }
 
                 System.out.println(query);
             }

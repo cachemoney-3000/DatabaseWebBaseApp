@@ -17,7 +17,7 @@ public class Utility {
         this.statement = statement;
     }
 
-    public void doPostHelper(HttpServletRequest request, String userType) {
+    public void doPostHelper(HttpServletRequest request, String userType) throws SQLException {
         // Get the query from the text box
         String textBox = request.getParameter("textBox");
         String query = textBox.toLowerCase();
@@ -56,7 +56,7 @@ public class Utility {
         System.out.println(buttonClicked);
     }
 
-    public void executeClicked(String query, HttpSession session, String textBox, String userType) {
+    public void executeClicked(String query, HttpSession session, String textBox, String userType) throws SQLException {
         String result;
         String execute = null;
         String text;
@@ -90,7 +90,7 @@ public class Utility {
                 execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">SELECT is the only command allowed for client-user</p></div>";
             }
             // root and dataentry users have access to UPDATE query
-            else if (userType.equals("root") || userType.equals("dataentry")){
+            else if (userType.equals("root")){
                 try {
                     // Run the update query
                     execute = updateQuery(textBox, userType);
@@ -100,6 +100,8 @@ public class Utility {
                     // Show any errors to the user
                     execute = "<div class = \"executionContainerBad\"><p class = \"executionText\">" + e.getMessage() + "</p></div>";
                     e.printStackTrace();
+                    // Delete the temporary table that the program created
+                    statement.executeUpdate("DROP TABLE tempTable");
                 }
             }
             session.setAttribute("execute", execute);
@@ -126,7 +128,8 @@ public class Utility {
 
         // Insert all the column headers
         for (int i = 1; i <= numColumns; i++) {
-            result.append("<th scope='col'>").append(metaData.getColumnName(i).toUpperCase()).append("</th>");
+            String columnName = metaData.getColumnName(i).toUpperCase().replace("_", " ");
+            result.append("<th scope='col'>").append(columnName).append("</th>");
         }
         // Close the headers
         result.append("</tr></thead>");
@@ -146,21 +149,40 @@ public class Utility {
         return result.toString();
     }
 
+    public String updateQueryDataEntry(String input, int quantity) throws SQLException {
+        StringBuilder result = new StringBuilder();
+        int numRowsUpdated;
+
+        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
+        // Store the count of shipments greater or equal than 100 here
+
+        // Execute the query
+        result.append("<div class = \"executionContainer\"><p class = \"executionText\">");
+        numRowsUpdated = statement.executeUpdate(input);
+        result.append("The statement executed succesfully.</br>").append(numRowsUpdated).append(" row(s) affected");
+
+
+        // Show a message that the business logic is triggered
+        if (quantity >= 100)
+            result.append("</br>Business Logic Detected! - Updating Supplier Status");
+
+
+        result.append("</p>");
+        return result.toString();
+    }
+
     private String updateQuery(String input, String userType) throws SQLException {
         StringBuilder result = new StringBuilder();
         int numRowsUpdated = 0;
 
-        //statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
         // Store the count of shipments greater or equal than 100 here
         int numShipmentBefore = getNumShipments();
 
-        if (!userType.equals("dataentry")) {
-            // Create a temporary table to keep track of the number of shipments
-            statement.executeUpdate("CREATE TABLE tempTable LIKE shipments");
-            // Copy all the contents of shipments to the tempTable
-            statement.executeUpdate("INSERT INTO tempTable SELECT * FROM shipments");
-        }
-
+        // Create a temporary table to keep track of the number of shipments
+        statement.executeUpdate("CREATE TABLE tempTable LIKE shipments");
+        // Copy all the contents of shipments to the tempTable
+        statement.executeUpdate("INSERT INTO tempTable SELECT * FROM shipments");
 
         // Execute the query
         result.append("<div class = \"executionContainer\"><p class = \"executionText\">");
@@ -171,7 +193,8 @@ public class Utility {
         int numShipmentAfter = getNumShipments();
 
         // Update the status of the suppliers if the shipment quantity exceeds 100
-        if (numShipmentBefore < numShipmentAfter && !userType.equals("dataentry")) {
+        if (numShipmentBefore < numShipmentAfter) {
+            // Count how many rows was affected by the query
             int numRowsAffected = statement.executeUpdate("UPDATE suppliers SET status = status + 5 WHERE snum IN " +
                     "(SELECT DISTINCT snum FROM shipments LEFT JOIN tempTable USING (snum, pnum, jnum, quantity) " +
                     "WHERE tempTable.snum IS NULL)");
@@ -180,10 +203,8 @@ public class Utility {
             result.append("</br>Business Logic Updated ").append(numRowsAffected).append(" Supplier(s) status marks");
         }
 
-        if (!userType.equals("dataentry")){
-            // Delete the temporary table
-            statement.executeUpdate("DROP TABLE tempTable");
-        }
+        // Delete the temporary table
+        statement.executeUpdate("DROP TABLE tempTable");
 
         result.append("</p>");
         return result.toString();
@@ -199,19 +220,6 @@ public class Utility {
 
     public String logout(HttpServletRequest request){
         String path = "/index.jsp";
-
-        // Close the connection when logging out
-        Connection connection;
-        try {
-            connection = statement.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
         // Invalidate the session when logging out
         HttpSession session = request.getSession();

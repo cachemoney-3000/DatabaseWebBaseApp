@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class Initialize {
-    public Statement initializeServlet(ServletConfig config, ServletContext context, String filepath) {
+    public Statement initializeServlet(ServletConfig config, ServletContext context, String filepath) throws SQLException {
         Properties prop = null;
         InputStream fis;
         try {
@@ -29,8 +29,8 @@ public class Initialize {
         String pass = prop.getProperty("pass");
         String url = prop.getProperty("url");
         String driver = prop.getProperty("driver");
-        Connection connection;
-        Statement statement;
+        Connection connection = null;
+        Statement statement = null;
 
         try {
             Class.forName(driver);
@@ -38,7 +38,13 @@ public class Initialize {
             statement = connection.createStatement();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        } finally {
+            // Avoid leak if an exception was thrown in createStatement
+            if (statement == null) {
+                connection.close();
+            }
         }
+
 
         return statement;
     }
