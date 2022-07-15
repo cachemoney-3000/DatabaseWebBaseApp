@@ -1,3 +1,9 @@
+/* Name: Joshua Samontanez
+Course: CNT 4714 – Summer 2022 – Project Three
+Assignment title: A Three-Tier Distributed Web-Based Application
+Date: August 4, 2022
+*/
+
 package com.project3;
 
 import jakarta.servlet.ServletConfig;
