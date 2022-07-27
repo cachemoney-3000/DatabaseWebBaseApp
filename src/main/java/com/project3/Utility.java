@@ -153,8 +153,7 @@ public class Utility {
         StringBuilder result = new StringBuilder();
         int numRowsUpdated;
 
-        statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
-        // Store the count of shipments greater or equal than 100 here
+        //statement.execute("SET FOREIGN_KEY_CHECKS = 1;");
 
         // Execute the query
         result.append("<div class = \"executionContainer\"><p class = \"executionText\">");
@@ -175,7 +174,7 @@ public class Utility {
         StringBuilder result = new StringBuilder();
         int numRowsUpdated = 0;
 
-        statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
+        //statement.execute("SET FOREIGN_KEY_CHECKS = 0;");
         // Store the count of shipments greater or equal than 100 here
         int numShipmentBefore = getNumShipments();
 

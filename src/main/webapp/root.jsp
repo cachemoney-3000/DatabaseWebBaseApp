@@ -42,7 +42,7 @@ Date: August 4, 2022
 <div class = "Hbox">
     <div class = "container">
         <div class = "connectionContainer">
-            <label class = "connectionText">You are connected to the Project 3 Enterprise System Database as a data-entry user</label>
+            <label class = "connectionText">You are connected to the Project 3 Enterprise System Database as a root-level user</label>
         </div>
         <form action="root" method="get" class = "button-inline">
             <input type = "submit" value = "Logout" name="logoutButton" id="logoutButton"  class = "logoutButton">
