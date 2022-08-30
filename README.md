@@ -1,4 +1,4 @@
-# Project3-WebBasedApp
+# Project3-WebBaseApp
 Title: “Project Three: Developing A Three-Tier Distributed Web-Based Application”
 
 Objectives: To incorporate many of the techniques we’ve learned so far this semester into a distributed
